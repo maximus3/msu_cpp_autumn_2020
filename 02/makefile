@@ -1,6 +1,6 @@
 TARGET = prog.e
 
-FLAGS = -O2 -Wall -Werror -std=gnu++17 -lm -c -o
+FLAGS = -O2 -Wall -Werror -std=gnu++17 -c -o
 
 OBJ = test_runner.o TokenParser.o test.o
 

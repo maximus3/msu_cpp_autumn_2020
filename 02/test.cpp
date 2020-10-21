@@ -15,7 +15,7 @@ tests_consructor() {
         out << "END";
     };
 
-    DigitTokenCallback digit_callback = [&out](const int& token) {
+    DigitTokenCallback digit_callback = [&out](const int token) {
         out << token << "-DIGIT";
     };
 
@@ -29,7 +29,7 @@ tests_consructor() {
                                      , string_callback);
                                      
     
-    parser.parse("token token2 323 123token4 token5 6token 75435");
+    parser.Parse("token token2 323 123token4 token5 6token 75435");
     
     Assert(out.str() == "STARTtoken-STRINGtoken2-STRING323-DIGIT123token4-STRINGtoken5-STRING6token-STRING75435-DIGITEND"
            , "test_constr: output <<" + out.str() + ">>");
@@ -47,7 +47,7 @@ tests_set() {
         out << "END";
     };
 
-    DigitTokenCallback digit_callback = [&out](const int& token) {
+    DigitTokenCallback digit_callback = [&out](const int token) {
         out << token << "-DIGIT";
     };
 
@@ -63,7 +63,7 @@ tests_set() {
     parser.SetStringTokenCallback(string_callback);
                                      
     
-    parser.parse("fdsfe 123456 323 123fsdsd 435");
+    parser.Parse("fdsfe 123456 323 123fsdsd 435");
     
     Assert(out.str() == "STARTfdsfe-STRING123456-DIGIT323-DIGIT123fsdsd-STRING435-DIGITEND"
            , "test_set: output <<" + out.str() + ">>");
@@ -81,7 +81,7 @@ tests_any() {
         out << "END";
     };
 
-    DigitTokenCallback digit_callback = [&out](const int& token) {
+    DigitTokenCallback digit_callback = [&out](const int token) {
         out << token << "-DIGIT";
     };
 
@@ -95,7 +95,7 @@ tests_any() {
     parser.SetStringTokenCallback(string_callback);
                                     
     
-    parser.parse("fdsfe 123456 323 123fsdsd 435");
+    parser.Parse("fdsfe 123456 323 123fsdsd 435");
     
     Assert(out.str() == "STARTfdsfe-STRING123456-DIGIT323-DIGIT123fsdsd-STRING435-DIGITEND"
            , "test_any: output <<" + out.str() + ">>");

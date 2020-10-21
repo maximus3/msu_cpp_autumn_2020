@@ -1,5 +1,7 @@
 #include "TokenParser.h"
 
+#define CHECK_ALL_DIGITS  all_digits ? digit_callback(std::stoi(token)) : string_callback(token)
+
 TokenParser::TokenParser(const Callback& start_callback_
         , const Callback& finish_callback_
         , const DigitTokenCallback& digit_callback_
@@ -10,35 +12,31 @@ TokenParser::TokenParser(const Callback& start_callback_
         , string_callback(string_callback_) {}
 
 
-void TokenParser::SetStartCallback(Callback callback) {
+void TokenParser::SetStartCallback(const Callback& callback) {
     start_callback = callback;
 }
 
-void TokenParser::SetFinishCallback(Callback callback) {
+void TokenParser::SetFinishCallback(const Callback& callback) {
     finish_callback = callback;
 }
 
-void TokenParser::SetDigitTokenCallback(const DigitTokenCallback callback) {
+void TokenParser::SetDigitTokenCallback(const DigitTokenCallback& callback) {
     digit_callback = callback;
 }
 
-void TokenParser::SetStringTokenCallback(const StringTokenCallback callback) {
+void TokenParser::SetStringTokenCallback(const StringTokenCallback& callback) {
     string_callback = callback;
 }
 
-void TokenParser::parse(const std::string& text) {
+void TokenParser::Parse(const std::string& text) {
     start_callback();
     
     std::string token = "";
     bool all_digits = true;
     
-    for(auto c: text) {
+    for(const auto& c: text) {
         if (std::isspace(c) && token.length()) {
-            if (all_digits) {
-                digit_callback(std::stoi(token));
-            } else {
-                string_callback(token);
-            }
+            CHECK_ALL_DIGITS;
             token = "";
             all_digits = true;
             continue;
@@ -49,11 +47,7 @@ void TokenParser::parse(const std::string& text) {
         token += c;
     }
     if (token.length()) {
-        if (all_digits) {
-            digit_callback(std::stoi(token));
-        } else {
-            string_callback(token);
-        }
+        CHECK_ALL_DIGITS;
     }
     
     finish_callback();
