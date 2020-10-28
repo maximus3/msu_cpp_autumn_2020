@@ -9,14 +9,14 @@ size_t MatrixRow::getSize() const {
     return n;
 }
     
-int& MatrixRow::operator[] (const size_t& i) {
+int& MatrixRow::operator[] (size_t i) {
     if (i >= n) {
         throw std::out_of_range("");
     }
     return row[i];
 }
 
-int& MatrixRow::operator[] (const size_t& i) const{
+const int& MatrixRow::operator[] (size_t i) const{
     if (i >= n) {
         throw std::out_of_range("");
     }
@@ -30,7 +30,7 @@ MatrixRow& MatrixRow::operator= (const MatrixRow& m_row) {
     return *this;
 }
 
-MatrixRow& MatrixRow::operator*= (const int& x) {
+MatrixRow& MatrixRow::operator*= (int x) {
     for (size_t i = 0; i < n; i++) {
         row[i] *= x;
     }
@@ -84,22 +84,22 @@ size_t Matrix::getRows() const {
 size_t Matrix::getColumns() const {
     return ncolumns;
 }
-    
-MatrixRow& Matrix::operator[] (const size_t& i) {
+
+MatrixRow& Matrix::operator[] (size_t i) {
     if (i >= nrows) {
         throw std::out_of_range("");
     }
     return *mproxy[i];
 }
 
-MatrixRow& Matrix::operator[] (const size_t& i) const {
+const MatrixRow& Matrix::operator[] (size_t i) const {
     if (i >= nrows) {
         throw std::out_of_range("");
     }
     return *mproxy[i];
 }
 
-Matrix& Matrix::operator*= (const int& x) {
+Matrix& Matrix::operator*= (int x) {
     for (size_t i = 0; i < nrows; i++) {
         *mproxy[i] *= x;
     }
@@ -107,6 +107,9 @@ Matrix& Matrix::operator*= (const int& x) {
 }
 
 Matrix Matrix::operator+ (const Matrix& m) const {
+    if (m.getRows() != nrows || m.getColumns() != ncolumns) {
+        throw std::runtime_error("");
+    }
     Matrix m_sum = Matrix(nrows, ncolumns);
     for (size_t i = 0; i < nrows; i++) {
         m_sum[i] = *mproxy[i] + m[i];
@@ -115,6 +118,9 @@ Matrix Matrix::operator+ (const Matrix& m) const {
 }
 
 bool Matrix::operator== (const Matrix& m) const {
+    if (m.getRows() != nrows || m.getColumns() != ncolumns) {
+        return false;
+    }
     for (size_t i = 0; i < nrows; i++) {
         if (*mproxy[i] != m[i]) {
             return false;
@@ -124,6 +130,9 @@ bool Matrix::operator== (const Matrix& m) const {
 }
 
 bool Matrix::operator!= (const Matrix& m) const {
+    if (m.getRows() != nrows || m.getColumns() != ncolumns) {
+        return true;
+    }
     for (size_t i = 0; i < nrows; i++) {
         if (*mproxy[i] != m[i]) {
             return true;

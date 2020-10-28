@@ -10,9 +10,9 @@ public:
     MatrixRow(size_t n_);
     size_t getSize() const;  
 
-    int& operator[] (const size_t& i);
-    int& operator[] (const size_t& i) const;
-    MatrixRow& operator*= (const int& x);
+    int& operator[] (size_t i);
+    const int& operator[] (size_t i) const;
+    MatrixRow& operator*= (int x);
     MatrixRow& operator= (const MatrixRow& m);
     MatrixRow operator+ (const MatrixRow& m) const;
     bool operator== (const MatrixRow& m) const;
@@ -31,9 +31,9 @@ public:
     size_t getRows() const;
     size_t getColumns() const;
 
-    MatrixRow& operator[] (const size_t& i);
-    MatrixRow& operator[] (const size_t& i) const;
-    Matrix& operator*= (const int& x);
+    MatrixRow& operator[] (size_t i);
+    const MatrixRow& operator[] (size_t i) const;
+    Matrix& operator*= (int x);
     Matrix operator+ (const Matrix& m) const;
     bool operator== (const Matrix& m) const;
     bool operator!= (const Matrix& m) const;

@@ -9,6 +9,16 @@ unittests(void) {
     const size_t cols = 3;
 
     Matrix m(rows, cols);
+    
+    Matrix m_new_size(rows + 1, cols + 1);
+    Assert(!(m_new_size == m), "== for different size");
+    Assert(m_new_size != m, "!= for different size");
+    try {
+        m_new_size + m;
+        Assert(0 == 1, "+ for different size");
+    } catch (const std::runtime_error&) {
+        Assert(0 == 0, "+ for different size OK");
+    }
 
     Assert(m.getRows() == rows, "Rows");
     Assert(m.getColumns() == cols, "Columns");
@@ -16,25 +26,27 @@ unittests(void) {
     m[1][2] = 5; // строка 1, колонка 2
     double x = m[4][1];
     Assert(x < 0.0001, "x");
+    
+    
 
     try {
         std::cout << m[rows][0];
         Assert(0 == 1, "Rows RT");
-    } catch (std::out_of_range&) {
+    } catch (const std::out_of_range&) {
         Assert(0 == 0, "Rows RT OK");
     }
 
     try {
         std::cout << m[0][cols];
         Assert(0 == 1, "Cols RT");
-    } catch (std::out_of_range&) {
+    } catch (const std::out_of_range&) {
         Assert(0 == 0, "Cols RT OK");
     }
 
     try {
         std::cout << m[rows][cols];
         Assert(0 == 1, "Rows Cols RT");
-    } catch (std::out_of_range&) {
+    } catch (const std::out_of_range&) {
         Assert(0 == 0, "Rows Cols RT OK");
     }
 
