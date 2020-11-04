@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 
 size_t getSizeByLength(size_t length);
