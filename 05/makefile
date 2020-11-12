@@ -15,7 +15,7 @@ clean:
 $(TARGET): $(OBJ)
 	g++ $(OBJ) -o $(TARGET)
 	
-test.o: test.cpp test_runner.h serializer.tpp
+test.o: test.cpp test_runner.h serializer.hpp
 	g++ $< $(FLAGS) $@
 
 %.o: %.cpp %.h

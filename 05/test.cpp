@@ -1,7 +1,8 @@
 #include <sstream>
+#include <algorithm>
 
 #include "test_runner.h"
-#include "serializer.tpp"
+#include "serializer.hpp"
 
 struct Data {
     uint64_t a;
@@ -68,11 +69,24 @@ test_3() {
     Assert(err == Error::CorruptedArchive, "Error");
 }
 
+void
+test_4() {
+    std::stringstream stream;
+
+    Data y { 0, false, 0 };
+    stream << "-123 true 123";
+    Deserializer deserializer(stream);
+    const Error err = deserializer.load(y);
+
+    Assert(err == Error::CorruptedArchive, "Error");
+}
+
 int
 main(void) {
     TestRunner runner = TestRunner();
     runner.RunTest(test_1, "test_1");
     runner.RunTest(test_2, "test_2");
     runner.RunTest(test_3, "test_3");
+    runner.RunTest(test_4, "test_4");
     return 0;
 }

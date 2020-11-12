@@ -56,7 +56,6 @@ public:
 class Deserializer
 {
 private:
-    static constexpr char Separator = ' ';
     std::istream& in_;
 
     template <class T>
@@ -75,8 +74,14 @@ private:
     }
 
     Error deserialize(uint64_t& value) {
-        in_ >> value;
-        return in_ ? Error::NoError : Error::CorruptedArchive;
+        std::string s;
+
+        in_ >> s;
+        if (s.length() > 0 && std::all_of(s.begin(), s.end(), isdigit)) {
+            value = std::stoi(s);
+            return Error::NoError;
+        }
+        return Error::CorruptedArchive;
     }
 
 public:
