@@ -77,8 +77,12 @@ private:
         std::string s;
 
         in_ >> s;
-        if (s.length() > 0 && std::all_of(s.begin(), s.end(), isdigit)) {
-            value = std::stoi(s);
+        if (s.length() > 0 && s[0] != '-') {
+            try {
+                value = std::stoull(s);
+            } catch (const std::logic_error&) {
+                return Error::CorruptedArchive;
+            }
             return Error::NoError;
         }
         return Error::CorruptedArchive;

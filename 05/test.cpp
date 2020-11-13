@@ -81,6 +81,18 @@ test_4() {
     Assert(err == Error::CorruptedArchive, "Error");
 }
 
+void
+test_5() {
+    std::stringstream stream;
+
+    Data y { 0, false, 0 };
+    stream << "123 false -1";
+    Deserializer deserializer(stream);
+    const Error err = deserializer.load(y);
+
+    Assert(err == Error::CorruptedArchive, "Error");
+}
+
 int
 main(void) {
     TestRunner runner = TestRunner();
@@ -88,5 +100,6 @@ main(void) {
     runner.RunTest(test_2, "test_2");
     runner.RunTest(test_3, "test_3");
     runner.RunTest(test_4, "test_4");
+    runner.RunTest(test_5, "test_5");
     return 0;
 }
