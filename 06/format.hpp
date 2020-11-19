@@ -4,6 +4,45 @@
 #include <vector>
 #include <stdexcept>
 
+class format_out_of_range_error: public std::out_of_range {
+private:
+    std::string msg;
+public:
+    explicit format_out_of_range_error(const std::string& what)
+    : std::out_of_range(what)
+    , msg(what) {}
+
+    const char* what() const noexcept {
+        return msg.c_str();
+    }
+};
+
+class format_invalid_argument_error: public std::invalid_argument {
+private:
+    std::string msg;
+public:
+    explicit format_invalid_argument_error(const std::string& what)
+    : std::invalid_argument(what)
+    , msg(what) {}
+
+    const char* what() const noexcept {
+        return msg.c_str();
+    }
+};
+
+class format_syntax_error: public std::runtime_error {
+private:
+    std::string msg;
+public:
+    explicit format_syntax_error(const std::string& what)
+    : std::runtime_error(what)
+    , msg(what) {}
+
+    const char* what() const noexcept {
+        return msg.c_str();
+    }
+};
+
 template <class T>
 std::string
 make_string(const T& arg) {
@@ -26,7 +65,7 @@ format(const std::string& str, Args&&... args) {
                 if (num >= str_args.size()) {
                     std::stringstream error_str;
                     error_str << num << ">=" << str_args.size();
-                    throw std::out_of_range(error_str.str());
+                    throw format_out_of_range_error(error_str.str());
                 }
                 format_ss << str_args[num];
                 is_num = false;
@@ -35,7 +74,7 @@ format(const std::string& str, Args&&... args) {
             if (!std::isdigit(c)) {
                 std::stringstream error_str;
                 error_str << c;
-                throw std::invalid_argument(error_str.str());
+                throw format_invalid_argument_error(error_str.str());
             }
             num = num * 10 + (c - '0');
         }
@@ -43,13 +82,13 @@ format(const std::string& str, Args&&... args) {
             is_num = true;
             num = 0;
         } else if (c == '}') {
-            throw std::runtime_error("Unexpected symbol '}'");
+            throw format_syntax_error("Unexpected symbol '}'");
         } else {
             format_ss << c;
         }
     }
     if (is_num) {
-        throw std::runtime_error("Unexpected symbol '{'");
+        throw format_syntax_error("Unexpected symbol '{'");
     }
     return format_ss.str();
 }

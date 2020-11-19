@@ -18,27 +18,27 @@ unittests() {
     try {
         format("{0}");
         Assert(1 == 0, "out_of_range 0");
-    } catch (const std::out_of_range&) {}
+    } catch (const format_out_of_range_error&) {}
 
     try {
         format("{1}", 1);
         Assert(1 == 0, "out_of_range 1");
-    } catch (const std::out_of_range&) {}
+    } catch (const format_out_of_range_error&) {}
 
     try {
         format("{f}", 1);
         Assert(1 == 0, "invalid_argument");
-    } catch (const std::invalid_argument&) {}
+    } catch (const format_invalid_argument_error&) {}
 
     try {
         format("Hi, {0} {", "Ivan");
         Assert(1 == 0, "runtime_error {");
-    } catch (const std::runtime_error&) {}
+    } catch (const format_syntax_error&) {}
 
     try {
         format("Hi, {0}}", "Ivan");
         Assert(1 == 0, "runtime_error }");
-    } catch (const std::runtime_error&) {}
+    } catch (const format_syntax_error&) {}
 }
 
 int
