@@ -12,7 +12,7 @@ public:
     : std::out_of_range(what)
     , msg(what) {}
 
-    const char* what() const noexcept {
+    const char* what() const noexcept override {
         return msg.c_str();
     }
 };
@@ -25,7 +25,7 @@ public:
     : std::invalid_argument(what)
     , msg(what) {}
 
-    const char* what() const noexcept {
+    const char* what() const noexcept override {
         return msg.c_str();
     }
 };
@@ -38,7 +38,7 @@ public:
     : std::runtime_error(what)
     , msg(what) {}
 
-    const char* what() const noexcept {
+    const char* what() const noexcept override {
         return msg.c_str();
     }
 };
@@ -53,8 +53,8 @@ make_string(const T& arg) {
 
 template <class... Args>
 std::string
-format(const std::string& str, Args&&... args) {
-    std::vector<std::string> str_args {make_string(std::forward<Args>(args))...};
+format(const std::string& str, const Args&... args) {
+    std::vector<std::string> str_args {make_string(args)...};
 
     bool is_num = false;
     size_t num = 0;
