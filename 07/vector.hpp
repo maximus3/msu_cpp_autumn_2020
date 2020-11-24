@@ -14,10 +14,6 @@ public:
     void deallocate(pointer ptr) {
         delete[] ptr;
     }
-    
-    size_type max_size() const noexcept {
-        return std::numeric_limits<size_type>::max();
-    }
 };
 
 template<class T>
@@ -95,10 +91,10 @@ class Vector {
     using iterator = Iterator<T>;
     using reverse_iterator =  std::reverse_iterator<iterator>;
 private:
+    allocator_type alloc_;
     size_type size_;
     size_type capacity_;
     pointer data_;
-    allocator_type alloc_;
 public:
     explicit Vector(size_type count = 0)
         : size_(count)
@@ -185,12 +181,12 @@ public:
     }
     
     template< class... Args >
-    void emplace_back( value_type first, Args&&... args ) {
+    void emplace_back( const value_type& first, Args&&... args ) {
         push_back(first);
         emplace_back(std::forward<Args>(args)...);
     }
 
-    void emplace_back( value_type first ) {
+    void emplace_back( const value_type& first ) {
         push_back(first);
     }
     
