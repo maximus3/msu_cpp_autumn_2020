@@ -44,11 +44,23 @@ test_1() {
 void
 test_2() {
     Vector vec(3, 1);
+    Vector vec1 = vec;
+    Vector vec2(vec1);
 
     assert(vec.size() == 3);
     assert(vec[0] == 1);
     assert(vec[1] == 1);
     assert(vec[2] == 1);
+    
+    assert(vec1.size() == 3);
+    assert(vec1[0] == 1);
+    assert(vec1[1] == 1);
+    assert(vec1[2] == 1);
+
+    assert(vec2.size() == 3);
+    assert(vec2[0] == 1);
+    assert(vec2[1] == 1);
+    assert(vec2[2] == 1);
 
     vec.reserve(10);
     assert(vec.size() == 3);

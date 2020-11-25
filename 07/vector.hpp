@@ -112,6 +112,55 @@ public:
         , data_(alloc_.allocate(init.size())) {
         std::copy(init.begin(), init.end(), begin());
     }
+
+    Vector(const Vector& other) {
+        alloc_ = other.alloc_;
+        size_ = other.size_;
+        capacity_ = other.capacity_;
+        data_ = alloc_.allocate(capacity_);
+        for(size_type i = 0; i < size_; i++){
+            data_[i] = other[i];
+        }
+    }
+
+    Vector(Vector&& other) {
+        alloc_ = std::move(other.alloc_);
+        size_ = std::move(other.size_);
+        capacity_ = std::move(other.capacity_);
+        data_ = other.data_;
+        other.data_ = nullptr;
+        other.size_ = 0;
+        other.capacity_ = 0;
+    }   
+
+    Vector& operator=(const Vector& other) {
+        if (this == &other) {
+            return *this;
+        }
+        this->~Vector();
+        alloc_ = other.alloc_;
+        size_ = other.size_;
+        capacity_ = other.capacity_;
+        data_ = alloc_.allocate(capacity_);
+        for(size_type i = 0; i < size_; i++){
+            data_[i] = other[i];
+        }
+    }
+
+    Vector& operator=(Vector&& other) {
+        if (this == &other) {
+            return *this;
+        }
+        this->~Vector();
+        alloc_ = std::move(other.alloc_);
+        size_ = std::move(other.size_);
+        capacity_ = std::move(other.capacity_);
+        data_ = other.data_;
+        other.data_ = nullptr;
+        other.size_ = 0;
+        other.capacity_ = 0;
+        return *this;
+    }
     
     iterator begin() noexcept {
         return iterator(data_);
@@ -172,6 +221,17 @@ public:
         }
         data_[size_++] = value;
     }
+
+    void push_back( value_type&& value ) {
+        if (size_ == capacity_){
+            if (capacity_ == 0) {
+                capacity_++;
+            }
+            reserve(2 * capacity_);
+        }
+        data_[size_++] = value;
+    }
+
     void pop_back() {
         if (size_ > 0){
             size_--;
@@ -198,6 +258,8 @@ public:
     }
     
     ~Vector() {
-        alloc_.deallocate(data_);
+        if (data_ != nullptr) {
+            alloc_.deallocate(data_);
+        }
     }
 };
